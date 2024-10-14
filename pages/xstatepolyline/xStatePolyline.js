@@ -16,11 +16,42 @@ let polyline // La polyline en cours de construction;
 
 const polylineMachine = createMachine(
     {
-        /** @xstate-layout N4IgpgJg5mDOIC5gF8A0IB2B7CdGgAcsAbATwBkBLDMfEI2SgF0qwzoA9EBaANnVI9eAOgAM4iZMkB2ZGnokK1MMMoRitJAsYs2nRABYATAMQAOAIzCD0gJwXetgwGZezgw9ty5QA */
+        /** @xstate-layout N4IgpgJg5mDOIC5QAcD2AbAngGQJYDswA6XCdMAYgFkB5AVQGUBRAYWwEkWBpAbQAYAuohSpYuAC65U+YSAAeiAIwAmZUWUBORQBZtAVg0B2PYeV8+egDQhMiQxqIBmPcsUAOQ9sdG+HgGwAvgHWaFh4hETSYAAKqATi1PTMtABqTPxCSCBoYpLSsgoIALRuekR+bnwqGm6aGhp8jtrWtsV6bkTGip5mfIaVKnp6QSEYOATEUbHxiYysHNwZsjkSUjJZhYqKfuV+QyZGhqbKbs02iEXKXkQayqZG2rWOfn5XI9lj4cToEwD6ALYAQ3wmGm+HEsAoTAYLAAgtF0oJlqJVvkNohHCd1Hs3NsXu5HlZzsVFHptE5tOY3H5fH5tBVMe9QuMIj9CADgaC4uDIUwAHIAFSYACUllkVnl1qBCtpDIoiG5HM9Fa4THxXC0LqTyU0qTTqfSVUzPhMiGywByQWCIRQAEKw7gMaIOxGZES5NYFC4mIgWHSU2pDDx3TXFWU7bRmGp7fqPYzaILBED4VAQODIsITZEetHSrVK8oDTS1eoNJqhop6PyOG5RjRNevKEzDJPMr4kMhgbOoqXyJTaeXUjRBvw1eo6Nyhq4OCx7Uty9XuNzGzMRKbc8TdyVehA6Qejsn2Cp6KpNisaHamatDRT1tyK9UrlnfP5Aq0b+DilHb9G7xyGIgyUeXFDGcRVDArWU+HKRwDTJK5DEaPxDETAIgA */
         id: "polyLine",
         initial: "idle",
         states : {
             idle: {
+                on: {
+                    MOUSECLICK: {
+                        target: "onePoint",
+                        actions: "createLine"
+                    }
+                }
+            },
+
+            onePoint: {
+                on: {
+                    MOUSEMOVE: {
+                        target: "onePoint",
+                        internal: true,
+                        actions: "setLastPoint"
+                    },
+
+                    MOUSECLICK: {
+                        target: "line_manyPoints",
+                        actions: "addPoint"
+                    }
+                }
+            },
+
+            line_manyPoints: {
+                on: {
+                    BACKSPACE: {
+                        target: "line_manyPoints",
+                        internal: true,
+                        actions: "removeLastPoint"
+                    }
+                }
             }
         }
     },
